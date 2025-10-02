@@ -1,14 +1,14 @@
-# 📚 IT Center Management App
+# 📚 Course Management App
 
 ## 🌟 Overview
-**IT Center Management App** is a cross-platform mobile application built with **Flutter**, designed exclusively for **instructors and administrators** of IT training centers.  
+**Course Management App** is a cross-platform mobile application built with **Flutter**, designed exclusively for **teachers and administrators** of IT training centers.  
 The app helps manage **students, courses, and enrollments** efficiently, providing a clean and user-friendly interface for staff to streamline daily operations.
 
 ---
 
 ## 🖥️ Features
 
-### 👨‍🏫 Instructor
+### 👨‍🏫 Teacher
 - 🔐 Authentication with authorized account  
 - 🎓 Manage student information (view, update)  
 - 📘 Manage courses (create, edit, delete)  

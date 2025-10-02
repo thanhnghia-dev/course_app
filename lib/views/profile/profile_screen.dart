@@ -94,6 +94,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
           title: 'Chức vụ',
           value: user.role == 'ADMIN' ? 'Quản trị viên' : 'Giảng viên',
         ),
+        _divider(),
+        _buildProfileItem(
+          icon: Icons.info_outline,
+          title: 'Trạng thái',
+          value: user.status == 1 ? 'Đang hoạt động' : 'Ngừng hoạt động',
+          color: user.status == 1 ? Colors.green : Colors.red,
+          fontWeight: FontWeight.bold,
+        ),
       ],
     );
   }
@@ -102,6 +110,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     required IconData icon,
     required String title,
     required String value,
+    Color? color,
+    FontWeight? fontWeight,
   }) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,7 +128,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(height: 10),
             Text(
               value,
-              style: const TextStyle(color: Colors.black, fontSize: 16),
+              style: TextStyle(
+                color: color ?? Colors.black,
+                fontSize: 16,
+                fontWeight: fontWeight,
+              ),
             ),
           ],
         ),

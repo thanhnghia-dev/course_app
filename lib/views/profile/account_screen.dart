@@ -176,15 +176,17 @@ class _AccountScreenState extends State<AccountScreen> {
                                       icon: Icons.person_outline,
                                       title: 'Chỉnh sửa hồ sơ',
                                       onTap: () {
-                                        Navigator.of(
-                                          context,
-                                          rootNavigator: true,
-                                        ).push(
-                                          MaterialPageRoute(
-                                            builder: (_) =>
-                                                const EditProfileScreen(),
-                                          ),
-                                        );
+                                        if (_user != null) {
+                                          Navigator.of(
+                                            context,
+                                            rootNavigator: true,
+                                          ).push(
+                                            MaterialPageRoute(
+                                              builder: (_) =>
+                                                  EditProfileScreen(user: _user!),
+                                            ),
+                                          );
+                                        }
                                       },
                                     ),
                                     _buildMenuItem(
@@ -248,11 +250,12 @@ class _AccountScreenState extends State<AccountScreen> {
           Row(
             children: [
              CircleAvatar(
+                backgroundColor: Colors.grey[300],
                 radius: 35,
                 backgroundImage: NetworkImage(
                   user.image.url.isNotEmpty
                       ? user.image.url
-                      : 'https://icons.veryicon.com/png/o/miscellaneous/common-icons-31/default-avatar-2.png',
+                      : 'https://static.vecteezy.com/system/resources/thumbnails/024/983/914/small/simple-user-default-icon-free-png.png',
                 ),
               ),
               SizedBox(width: 15),
@@ -296,7 +299,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 'Xem thông tin cá nhân',
                 style: TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
               ),

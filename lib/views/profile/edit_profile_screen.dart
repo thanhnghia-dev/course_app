@@ -1,9 +1,13 @@
 import 'package:course_app/core/theme/app_colors.dart';
+import 'package:course_app/core/utils/util.dart';
+import 'package:course_app/models/user_model.dart';
 import 'package:course_app/views/widgets/label_with_asterisk_widget.dart';
 import 'package:flutter/material.dart';
 
 class EditProfileScreen extends StatefulWidget {
-  const EditProfileScreen({super.key});
+  final User? user;
+
+  const EditProfileScreen({super.key, required this.user});
 
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
@@ -11,30 +15,35 @@ class EditProfileScreen extends StatefulWidget {
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
   final nameController = TextEditingController();
-  final usernameController = TextEditingController();
   final dobController = TextEditingController();
   final genderController = TextEditingController();
 
   String? selectedGender;
   final List<String> genders = ['Nam', 'Nữ', 'Khác'];
+  final Map<int, String> genderMap = {0: 'Nữ', 1: 'Nam', 2: 'Khác'};
 
   @override
   void initState() {
     super.initState();
+    // Load User info
+    final user = widget.user;
+    nameController.text = user?.fullName ?? '';
+    dobController.text = user?.dob ?? '';
+    selectedGender = genderMap[user?.gender ?? -1];
+    genderController.text = selectedGender ?? '';
   }
 
   // Save data button
   Future<void> _saveButton() async {
-    String fullName = nameController.text;
-    String username = usernameController.text;
-    String dob = dobController.text;
-    String gender = genderController.text;
+    String fullName = nameController.text.trim();
+    String dob = dobController.text.trim();
+    String gender = genderController.text.trim();
 
-    // if (fullName.isNotEmpty && username.isNotEmpty && dob.isNotEmpty && gender.isNotEmpty) {
-
-    // } else {
-
-    // }
+    if (fullName.isEmpty && dob.isEmpty && gender.isEmpty) {
+      showOverlayToast(context, 'Vui lòng nhập đầy đủ thông tin');
+      return;
+    }
+    
   }
 
   // Select day of birth
@@ -88,9 +97,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     child: Stack(
                       children: [
                         CircleAvatar(
+                          backgroundColor: Colors.grey[300],
                           radius: 50,
                           backgroundImage: NetworkImage(
-                            "https://i.pravatar.cc/300",
+                            "https://static.vecteezy.com/system/resources/thumbnails/024/983/914/small/simple-user-default-icon-free-png.png",
                           ),
                         ),
                     
@@ -142,25 +152,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     obscureText: false,
                   ),
                   const SizedBox(height: 15),
-                  const LabelWithAsterisk(
-                    label: 'Tên đăng nhập',
-                    isRequired: true,
-                  ),
-                  const SizedBox(height: 8),
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: AppColors.borderSearch,
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Text(
-                      "username",
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                  ),
-                  const SizedBox(height: 15),
+
                   const LabelWithAsterisk(
                     label: 'Ngày sinh',
                     isRequired: true,
@@ -172,12 +164,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       suffixIcon: Icon(Icons.calendar_today),
-                      hintText:
-                          '---------------Chọn ngày sinh---------------',
+                      hintText:'---------------Chọn ngày sinh---------------',
                     ),
                     onTap: () => _selectDate(context),
                   ),
                   const SizedBox(height: 15),
+
                   const LabelWithAsterisk(
                     label: 'Giới tính',
                     isRequired: true,
@@ -203,11 +195,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      hintText:
-                          '---------------Chọn giới tính---------------',
+                      hintText:'---------------Chọn giới tính---------------',
                     ),
                   ),
                   const SizedBox(height: 25),
+
                   GestureDetector(
                     onTap: _saveButton,
                     child: Container(

@@ -7,6 +7,7 @@ class User {
   final String dob;
   final int gender;
   final String role;
+  final int? status;
   final ImageModel image;
 
   User({
@@ -16,6 +17,7 @@ class User {
     required this.dob,
     required this.gender,
     required this.role,
+    this.status,
     required this.image,
   });
 
@@ -27,6 +29,7 @@ class User {
       dob: json['dob'] ?? '',
       gender: json['gender'] ?? 0,
       role: json['role'] ?? '',
+      status: json['status'] ?? '',
       image: json['image'] != null
           ? ImageModel.fromJson(json['image'])
           : ImageModel.empty(),
@@ -41,6 +44,7 @@ class User {
       'dob': dob,
       'gender': gender,
       'role': role,
+      'status': status,
       'image': image,
     };
   }
