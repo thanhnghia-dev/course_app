@@ -9,7 +9,6 @@ class ExtensionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     final List<String> titles = [
       'Khóa học',
       'Lớp học',
@@ -31,46 +30,114 @@ class ExtensionWidget extends StatelessWidget {
       const AttendanceScreen(),
     ];
 
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return SizedBox(
-      height: 350,
+      height: screenHeight * 0.65, // or 0.45
       child: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 10.0,
-            mainAxisSpacing: 10.0,
-            childAspectRatio: 1.5,
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        physics: const BouncingScrollPhysics(),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: screenWidth > 600 ? 3 : 2,
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 12,
+          childAspectRatio: screenWidth > 600 ? 1.3 : 1.2,
         ),
         itemCount: titles.length,
         itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () {
+          return _AnimatedGridItem(
+            title: titles[index],
+            iconPath: icons[index],
+            destination: views[index],
+            screenWidth: screenWidth,
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _AnimatedGridItem extends StatefulWidget {
+  final String title;
+  final String iconPath;
+  final Widget destination;
+  final double screenWidth;
+
+  const _AnimatedGridItem({
+    required this.title,
+    required this.iconPath,
+    required this.destination,
+    required this.screenWidth,
+  });
+
+  @override
+  State<_AnimatedGridItem> createState() => _AnimatedGridItemState();
+}
+
+class _AnimatedGridItemState extends State<_AnimatedGridItem> {
+  bool _isPressed = false;
+  bool _isHovering = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final baseColor = const Color(0xffFFEAE4);
+    final hoverColor = const Color(0xffFFD5C6);
+
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovering = true),
+      onExit: (_) => setState(() => _isHovering = false),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        transform: _isPressed ? (Matrix4.identity()..scale(0.96)) : Matrix4.identity(),
+        curve: Curves.easeOut,
+        child: Material(
+          color: _isHovering ? hoverColor : baseColor,
+          borderRadius: BorderRadius.circular(12),
+          elevation: _isPressed ? 0 : 2,
+          shadowColor: Colors.black26,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(12),
+            splashColor: Colors.orange.withOpacity(0.25),
+            highlightColor: Colors.orange.withOpacity(0.1),
+            onTapDown: (_) => setState(() => _isPressed = true),
+            onTapCancel: () => setState(() => _isPressed = false),
+            onTapUp: (_) {
+              setState(() => _isPressed = false);
               Navigator.of(context, rootNavigator: true).push(
-                MaterialPageRoute(builder: (context) => views[index]),
+                MaterialPageRoute(builder: (context) => widget.destination),
               );
             },
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: const Color(0xffFFEAE4),
-                borderRadius: BorderRadius.circular(10),
-              ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Image.asset(icons[index], height: 90, width: 90),
-                  Text(
-                    titles[index],
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
+                  Flexible(
+                    flex: 3,
+                    child: Image.asset(
+                      widget.iconPath,
+                      fit: BoxFit.contain,
+                      width: widget.screenWidth * 0.22,
+                    ),
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: Text(
+                      widget.title,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontSize: widget.screenWidth * 0.045,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
-          );
-        },
+          ),
+        ),
       ),
     );
   }

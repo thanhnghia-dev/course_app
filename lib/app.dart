@@ -21,12 +21,12 @@ class _SplashScreenState extends State<SplashScreen> {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
       if (authProvider.isAuth) {
-        // Đã đăng nhập → vào NavigationMenu
+        // Logged in → Access NavigationMenu
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => const NavigationMenu()),
         );
       } else {
-        // Chưa đăng nhập → vào LoginScreen
+        // Not logged in yet → Access LoginScreen
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => const LoginScreen()),
         );
