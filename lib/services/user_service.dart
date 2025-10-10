@@ -108,9 +108,9 @@ class UserService {
       debugPrint("Response: ${response.data}");
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        return "Cập nhật thông tin thành công";
+        return "Đổi mật khẩu thành công";
       } else {
-        return "Cập nhật thông tin thất bại. Mã lỗi: ${response.statusCode} - ${response.data}";
+        return "Đổi mật khẩu thất bại. Mã lỗi: ${response.statusCode} - ${response.data}";
       }
     } on DioException catch (e) {
       debugPrint("Dio error: ${e.response?.data ?? e.message}");
@@ -146,9 +146,9 @@ class UserService {
       debugPrint("Response: ${response.data}");
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        return "Cập nhật thông tin thành công";
+        return "Đổi mật khẩu thành công";
       } else {
-        return "Cập nhật thông tin thất bại. Mã lỗi: ${response.statusCode} - ${response.data}";
+        return "Đổi mật khẩu thất bại. Mã lỗi: ${response.statusCode} - ${response.data}";
       }
     } on DioException catch (e) {
       debugPrint("Dio error: ${e.response?.data ?? e.message}");

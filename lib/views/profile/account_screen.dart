@@ -8,7 +8,6 @@ import 'package:course_app/views/profile/edit_profile_screen.dart';
 import 'package:course_app/views/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -95,17 +94,6 @@ class _AccountScreenState extends State<AccountScreen> {
         ],
       ),
     );
-  }
-
-  // Open Gmail Button
-  Future<void> _openMailButton() async {
-    final Uri gmailUri = Uri(scheme: 'mailto', path: 'example@gmail.com');
-
-    if (await canLaunchUrl(gmailUri)) {
-      await launchUrl(gmailUri);
-    } else {
-      debugPrint('Không mở được Gmail');
-    }
   }
 
   @override
@@ -208,11 +196,6 @@ class _AccountScreenState extends State<AccountScreen> {
                                       icon: Icons.logout,
                                       title: 'Đăng xuất',
                                       onTap: _logoutButton,
-                                    ),
-                                    _buildMenuItem(
-                                      icon: Icons.mail_outlined,
-                                      title: 'Yêu cầu hỗ trợ/góp ý',
-                                      onTap: _openMailButton,
                                     ),
                                   ],
                                 ),

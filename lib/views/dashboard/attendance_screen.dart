@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:course_app/core/utils/util.dart';
@@ -10,13 +11,15 @@ class AttendanceScreen extends StatefulWidget {
 }
 
 class _AttendanceScreenState extends State<AttendanceScreen>
-  with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   final Set<String> scannedQRCodes = {};
-
   final MobileScannerController cameraController = MobileScannerController();
+  final AudioPlayer _player = AudioPlayer();
   bool _isTorchOn = false;
-  bool _isBackCamera = true;
+
+  // ✅ Khóa quét để tránh spam callback
+  bool _isScanning = true;
 
   @override
   void initState() {
@@ -31,15 +34,23 @@ class _AttendanceScreenState extends State<AttendanceScreen>
   void dispose() {
     _controller.dispose();
     cameraController.dispose();
+    _player.dispose();
     super.dispose();
   }
 
-  void _showBarcodeDialog(String code) {
+  // Play Beep sound
+  Future<void> _playBeep() async {
+    await _player.play(AssetSource('sounds/beep.mp3'));
+  }
+
+  // Show Barcode dialog
+  Future<void> _showBarcodeDialog(String code) async {
     if (!mounted) return;
     if (scannedQRCodes.contains(code)) {
       showOverlayToast(context, '$code đã được quét rồi!');
     } else {
       scannedQRCodes.add(code);
+      await _playBeep();
       showOverlayToast(context, code);
     }
   }
@@ -71,16 +82,6 @@ class _AttendanceScreenState extends State<AttendanceScreen>
               setState(() => _isTorchOn = !_isTorchOn);
             },
           ),
-          IconButton(
-            icon: Icon(
-              _isBackCamera ? Icons.camera_rear : Icons.camera_front,
-              color: Colors.white,
-            ),
-            onPressed: () async {
-              await cameraController.switchCamera();
-              setState(() => _isBackCamera = !_isBackCamera);
-            },
-          ),
         ],
       ),
       body: Stack(
@@ -88,12 +89,24 @@ class _AttendanceScreenState extends State<AttendanceScreen>
           // Camera
           MobileScanner(
             controller: cameraController,
-            onDetect: (capture) {
+            onDetect: (capture) async {
+              if (!_isScanning) return; // ✅ khóa tạm để tránh spam
+
               final List<Barcode> barcodes = capture.barcodes;
-              if (barcodes.isNotEmpty) {
-                final String code = barcodes.first.rawValue ?? "Không đọc được";
-                _showBarcodeDialog(code);
-              }
+              if (barcodes.isEmpty) return;
+
+              final String code = barcodes.first.rawValue ?? "Không đọc được";
+
+              // ✅ bỏ qua mã rỗng hoặc không đọc được
+              if (code.trim().isEmpty || code == "Không đọc được") return;
+
+              _isScanning = false; // khóa quét
+              await _showBarcodeDialog(code);
+
+              // mở lại quét sau 2 giây
+              Future.delayed(const Duration(seconds: 2), () {
+                if (mounted) _isScanning = true;
+              });
             },
           ),
 
@@ -101,11 +114,11 @@ class _AttendanceScreenState extends State<AttendanceScreen>
           ScanOverlay(scanBoxSize: scanBoxSize),
 
           // Text hướng dẫn
-          Positioned(
+          const Positioned(
             bottom: 60,
             left: 0,
             right: 0,
-            child: const Center(
+            child: Center(
               child: Text(
                 "Đưa mã vào trong khung để quét",
                 style: TextStyle(
