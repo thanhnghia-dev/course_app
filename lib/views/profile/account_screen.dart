@@ -167,7 +167,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   child: Column(
                     children: [
                       const SizedBox(height: 20),
-                      _buildProfileCard(context, user!),
+                      _buildProfileCard(context, user),
 
                       Expanded(
                         child: SingleChildScrollView(
