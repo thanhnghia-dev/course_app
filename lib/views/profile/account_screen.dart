@@ -1,7 +1,7 @@
 import 'package:course_app/core/theme/app_colors.dart';
 import 'package:course_app/models/user_model.dart';
 import 'package:course_app/providers/auth_provider.dart';
-import 'package:course_app/services/User_service.dart';
+import 'package:course_app/providers/user_provider.dart';
 import 'package:course_app/views/auth/change_password_screen.dart';
 import 'package:course_app/views/auth/login_screen.dart';
 import 'package:course_app/views/profile/edit_profile_screen.dart';
@@ -17,20 +17,6 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
-  User? _user;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadUserInfo();
-  }
-
-  Future<void> _loadUserInfo() async {
-    final user = await UserService().fetchUserInfo();
-    setState(() {
-      _user = user;
-    });
-  }
 
   // Logout Button
   void _logoutButton() {
@@ -95,9 +81,57 @@ class _AccountScreenState extends State<AccountScreen> {
       ),
     );
   }
+  
+  // Support Request Button
+  void _supportRequestButton() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        backgroundColor: Colors.white,
+        title: const Text(
+          'Thông báo',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.red,
+            fontSize: 17,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: const Text(
+          'Chức năng đang phát triển, vui lòng quay lại sau',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 14, color: Colors.black),
+        ),
+        actionsAlignment: MainAxisAlignment.center,
+        actions: [
+          SizedBox(
+            width: 180,
+            child: TextButton(
+              onPressed: () => Navigator.pop(context, 'Đóng'),
+              style: TextButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(
+                  vertical: 10,
+                  horizontal: 10,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: const Text('Đóng'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = context.watch<UserProvider>();
+    final user = userProvider.user;
+    
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -113,7 +147,7 @@ class _AccountScreenState extends State<AccountScreen> {
         centerTitle: true,
         elevation: 0,
       ),
-      body: _user == null
+      body: user == null
           ? const Center(child: CircularProgressIndicator()) // loading
           : Stack(
               children: [
@@ -133,7 +167,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   child: Column(
                     children: [
                       const SizedBox(height: 20),
-                      _buildProfileCard(context, _user!),
+                      _buildProfileCard(context, user!),
 
                       Expanded(
                         child: SingleChildScrollView(
@@ -164,17 +198,15 @@ class _AccountScreenState extends State<AccountScreen> {
                                       icon: Icons.person_outline,
                                       title: 'Chỉnh sửa hồ sơ',
                                       onTap: () {
-                                        if (_user != null) {
-                                          Navigator.of(
-                                            context,
-                                            rootNavigator: true,
-                                          ).push(
-                                            MaterialPageRoute(
-                                              builder: (_) =>
-                                                  EditProfileScreen(user: _user!),
-                                            ),
-                                          );
-                                        }
+                                        Navigator.of(
+                                          context,
+                                          rootNavigator: true,
+                                        ).push(
+                                          MaterialPageRoute(
+                                            builder: (_) =>
+                                                EditProfileScreen(user: user),
+                                          ),
+                                        );
                                       },
                                     ),
                                     _buildMenuItem(
@@ -191,6 +223,11 @@ class _AccountScreenState extends State<AccountScreen> {
                                           ),
                                         );
                                       },
+                                    ),
+                                    _buildMenuItem(
+                                      icon: Icons.mail_outline,
+                                      title: 'Yêu cầu hỗ trợ/góp ý',
+                                      onTap: _supportRequestButton,
                                     ),
                                     _buildMenuItem(
                                       icon: Icons.logout,

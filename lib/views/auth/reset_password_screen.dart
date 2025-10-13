@@ -2,6 +2,7 @@ import 'package:course_app/core/theme/app_colors.dart';
 import 'package:course_app/core/utils/util.dart';
 import 'package:course_app/services/user_service.dart';
 import 'package:course_app/views/auth/login_screen.dart';
+import 'package:course_app/views/widgets/label_with_asterisk_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -88,14 +89,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Mật khẩu mới',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                const LabelWithAsterisk(label: 'Mật khẩu mới', isRequired: true),
                 const SizedBox(height: 8),
                 TextField(
                   controller: passwordController,
@@ -134,14 +128,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   ),
                 ),
                 const SizedBox(height: 15),
-                const Text(
-                  'Xác nhận lại mật khẩu',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                const LabelWithAsterisk(label: 'Xác nhận lại mật khẩu', isRequired: true),
                 const SizedBox(height: 8),
                 TextField(
                   controller: confirmPasswordController,

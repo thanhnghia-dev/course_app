@@ -9,7 +9,7 @@ class UserProvider with ChangeNotifier {
   User? get user => _user;
   bool get isLoading => _isLoading;
 
-  // Load User info
+  // Get User Information
   Future<void> getUserInfo() async {
     _isLoading = true;
     notifyListeners();
@@ -17,10 +17,18 @@ class UserProvider with ChangeNotifier {
     try {
       _user = await UserService().fetchUserInfo();
     } catch (e) {
+      debugPrint('Lỗi khi tải thông tin user: $e');
       _user = null;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
+  }
 
-    _isLoading = false;
+  // Update user after being edited
+  void updateUser(User newUser) {
+    _user = newUser;
     notifyListeners();
   }
+
 }
