@@ -1,4 +1,4 @@
-import 'package:course_app/views/dashboard/classroom_screen.dart';
+import 'package:course_app/views/home/attendance_history_screen.dart';
 import 'package:course_app/views/home/schedule_screen.dart';
 import 'package:course_app/views/profile/account_screen.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +47,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
       case 1:
         return const ScheduleScreen();
       case 2:
-        return const ClassroomScreen();
+        return const AttendanceHistoryScreen();
       case 3:
         return const AccountScreen();
       default:
@@ -76,11 +76,11 @@ class _NavigationMenuState extends State<NavigationMenu> {
           ),
           BottomNavigationBarItem(
             icon: _selectedIndex == 1 ? const Icon(Icons.calendar_month_rounded) : const Icon(Icons.calendar_month_outlined), 
-            label: 'Lịch',
+            label: 'Lịch công tác',
           ),
           BottomNavigationBarItem(
-            icon: _selectedIndex == 2 ? const Icon(Icons.class_rounded) : const Icon(Icons.class_outlined), 
-            label: 'Lớp học',
+            icon: _selectedIndex == 2 ? const Icon(Icons.qr_code_scanner) : const Icon(Icons.qr_code_scanner_outlined), 
+            label: 'Lịch sử quét',
           ),
           BottomNavigationBarItem(
             icon: _selectedIndex == 3 ? const Icon(Icons.person_rounded) : const Icon(Icons.person_outline), 

@@ -66,6 +66,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Column(
       children: [
         _buildProfileItem(
+          icon: Icons.badge_outlined,
+          title: 'Mã người dùng',
+          value: user.userId,
+        ),
+        _divider(),
+        _buildProfileItem(
           icon: Icons.person_outline,
           title: 'Họ và tên',
           value: user.fullName,

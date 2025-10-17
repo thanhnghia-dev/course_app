@@ -5,7 +5,7 @@ Future<void> showOverlayToast(BuildContext context, String message) async {
   
   final overlayEntry = OverlayEntry(
     builder: (context) => Positioned(
-      bottom: 10,
+      bottom: 40,
       left: MediaQuery.of(context).size.width * 0.1,
       right: MediaQuery.of(context).size.width * 0.1,
       child: Material(

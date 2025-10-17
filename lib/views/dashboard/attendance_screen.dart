@@ -18,7 +18,7 @@ class _AttendanceScreenState extends State<AttendanceScreen>
   final AudioPlayer _player = AudioPlayer();
   bool _isTorchOn = false;
 
-  // ✅ Khóa quét để tránh spam callback
+  // ✅ Lock scanning to avoid spam callback
   bool _isScanning = true;
 
   @override
@@ -90,30 +90,30 @@ class _AttendanceScreenState extends State<AttendanceScreen>
           MobileScanner(
             controller: cameraController,
             onDetect: (capture) async {
-              if (!_isScanning) return; // ✅ khóa tạm để tránh spam
+              if (!_isScanning) return; // ✅ Temporary lock to avoid spam
 
               final List<Barcode> barcodes = capture.barcodes;
               if (barcodes.isEmpty) return;
 
               final String code = barcodes.first.rawValue ?? "Không đọc được";
 
-              // ✅ bỏ qua mã rỗng hoặc không đọc được
+              // ✅ Ignore empty code or can not read
               if (code.trim().isEmpty || code == "Không đọc được") return;
 
-              _isScanning = false; // khóa quét
+              _isScanning = false; // Lock scanning
               await _showBarcodeDialog(code);
 
-              // mở lại quét sau 2 giây
+              // Restart scanning after 2 seconds
               Future.delayed(const Duration(seconds: 2), () {
                 if (mounted) _isScanning = true;
               });
             },
           ),
 
-          // Overlay + góc khung
+          // Overlay + Bore corner
           ScanOverlay(scanBoxSize: scanBoxSize),
 
-          // Text hướng dẫn
+          // Guideline Text
           const Positioned(
             bottom: 60,
             left: 0,
@@ -149,7 +149,7 @@ class ScanOverlay extends StatelessWidget {
 
       return Stack(
         children: [
-          // Nền tối, chừa khung trong suốt
+          // Dark backgournd, leave a transparent frame
           ColorFiltered(
             colorFilter: ColorFilter.mode(
               Colors.black.withOpacity(0.4),
@@ -178,7 +178,7 @@ class ScanOverlay extends StatelessWidget {
               ],
             ),
           ),
-          // 4 góc sáng
+          // 4 light corners
           Positioned(
             left: left,
             top: top,
@@ -203,23 +203,23 @@ class CornerPainter extends CustomPainter {
 
     const double cornerLength = 30;
 
-    // Góc trái trên
+    // Top-left corner
     canvas.drawLine(Offset(0, 0), Offset(cornerLength, 0), paint);
     canvas.drawLine(Offset(0, 0), Offset(0, cornerLength), paint);
 
-    // Góc phải trên
+    // Top-right corner
     canvas.drawLine(Offset(size.width, 0),
         Offset(size.width - cornerLength, 0), paint);
     canvas.drawLine(Offset(size.width, 0),
         Offset(size.width, cornerLength), paint);
 
-    // Góc trái dưới
+    // Bottom-left corner
     canvas.drawLine(Offset(0, size.height),
         Offset(cornerLength, size.height), paint);
     canvas.drawLine(Offset(0, size.height),
         Offset(0, size.height - cornerLength), paint);
 
-    // Góc phải dưới
+    // Bottom-right corner
     canvas.drawLine(Offset(size.width, size.height),
         Offset(size.width - cornerLength, size.height), paint);
     canvas.drawLine(Offset(size.width, size.height),

@@ -98,7 +98,7 @@ class _AccountScreenState extends State<AccountScreen> {
           ),
         ),
         content: const Text(
-          'Chức năng đang phát triển, vui lòng quay lại sau',
+          'Chức năng đang phát triển, vui lòng quay lại sau.',
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 14, color: Colors.black),
         ),
@@ -174,6 +174,8 @@ class _AccountScreenState extends State<AccountScreen> {
                           child: Column(
                             children: [
                               const SizedBox(height: 20),
+
+                              // Account settings
                               Container(
                                 padding: const EdgeInsets.all(5),
                                 decoration: BoxDecoration(
@@ -225,14 +227,45 @@ class _AccountScreenState extends State<AccountScreen> {
                                       },
                                     ),
                                     _buildMenuItem(
+                                      icon: Icons.logout,
+                                      title: 'Đăng xuất',
+                                      onTap: _logoutButton,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+
+                              // Other settings
+                              Container(
+                                padding: const EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.2),
+                                      spreadRadius: 5,
+                                      blurRadius: 8,
+                                      offset: const Offset(0, 3),
+                                    ),
+                                  ],
+                                  border: Border.all(
+                                    color: AppColors.borderContainer,
+                                    width: 1,
+                                  ),
+                                ),
+                                child: Column(
+                                  children: [
+                                    _buildMenuItem(
                                       icon: Icons.mail_outline,
                                       title: 'Yêu cầu hỗ trợ/góp ý',
                                       onTap: _supportRequestButton,
                                     ),
-                                    _buildMenuItem(
-                                      icon: Icons.logout,
-                                      title: 'Đăng xuất',
-                                      onTap: _logoutButton,
+                                    _buildAppVersion(
+                                      icon: Icons.info_outline_rounded,
+                                      title: 'Phiên bản ứng dụng',
+                                      version: '1.0.0',
                                     ),
                                   ],
                                 ),
@@ -275,7 +308,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 backgroundImage: NetworkImage(
                   user.image.url.isNotEmpty
                       ? user.image.url
-                      : 'https://static.vecteezy.com/system/resources/thumbnails/024/983/914/small/simple-user-default-icon-free-png.png',
+                      : 'https://www.seekpng.com/png/full/966-9665317_placeholder-image-person-jpg.png',
                 ),
               ),
               SizedBox(width: 15),
@@ -343,6 +376,24 @@ class _AccountScreenState extends State<AccountScreen> {
       ),
       trailing: const Icon(Icons.arrow_forward_ios, size: 16),
       onTap: onTap,
+    );
+  }
+  
+  Widget _buildAppVersion({
+    required IconData icon,
+    required String title,
+    required String version,
+  }) {
+    return ListTile(
+      leading: Icon(icon, color: AppColors.primary),
+      title: Text(
+        title,
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+      ),
+      trailing: Text(
+        version,
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+      ),
     );
   }
 }

@@ -92,7 +92,7 @@ class _StudentInfoScreenState extends State<StudentInfoScreen> {
 
     return Column(
       children: [
-        _buildMenuItem(title: 'Mã HV', data: student.studentId),
+        _buildMenuItem(title: 'Mã học viên', data: student.studentId),
         _buildMenuItem(title: 'Họ và tên', data: student.fullName),
         _buildMenuItem(title: 'Ngày sinh', data: formatDate(student.dob)),
         _buildMenuItem(title: 'Nơi sinh', data: student.birthPlace),

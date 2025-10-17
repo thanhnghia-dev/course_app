@@ -19,6 +19,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   @override
   void initState() {
     super.initState();
+    _selectedDay = DateTime.now();
+    _focusedDay = DateTime.now();
     initializeDateFormatting('vi_VN', null);
   }
 
@@ -61,15 +63,18 @@ class _CalendarWidgetState extends State<CalendarWidget> {
         ),
 
         calendarStyle: CalendarStyle(
-          todayDecoration: BoxDecoration(
-            color: AppColors.primary,
+          todayDecoration: const BoxDecoration(
+            color: Colors.transparent,
             shape: BoxShape.circle,
           ),
           selectedDecoration: BoxDecoration(
             color: AppColors.primary,
             shape: BoxShape.circle,
           ),
-          todayTextStyle: const TextStyle(color: Colors.white),
+          todayTextStyle: const TextStyle(
+            color: AppColors.primary,
+            fontWeight: FontWeight.bold,
+          ),
           selectedTextStyle: const TextStyle(color: Colors.white),
         ),
       ),

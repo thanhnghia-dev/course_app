@@ -170,8 +170,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         CircleAvatar(
                           backgroundColor: Colors.grey[300],
                           radius: 50,
-                          backgroundImage: const NetworkImage(
-                            "https://static.vecteezy.com/system/resources/thumbnails/024/983/914/small/simple-user-default-icon-free-png.png",
+                          backgroundImage: NetworkImage(
+                            widget.user?.image.url.isNotEmpty == true
+                                ? widget.user!.image.url
+                                : 'https://www.seekpng.com/png/full/966-9665317_placeholder-image-person-jpg.png',
                           ),
                         ),
                         Positioned(
@@ -179,7 +181,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           right: 0,
                           child: GestureDetector(
                             onTap: () {
-                              showOverlayToast(context, "Nút cập nhật ảnh đại diện");
+                              showOverlayToast(context, "Chức năng đang phát triển. Vui lòng thử lại sau!");
                             },
                             child: Container(
                               decoration: BoxDecoration(
